@@ -330,8 +330,10 @@ don't think I'll ever use more than 128mb.
 
 This was a for-fun side project and one of the goals was to eliminate
 dependencies from the site generation process. C makes it really annoying, due
-to build systems and header files, to starting splitting things up, so I just
+to build systems and header files, to start splitting things up, so I just
 didn't do it. 
+
+If you send a pull request that splits it up nicely, I'll gladly accept.
 
 ## Why didn't you use Markdown?
 
