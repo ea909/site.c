@@ -326,14 +326,10 @@ is fine. Otherwise, use the third argument to request more memory.
 Eventually, I'll change the arena implementation to grow as needed, but I
 don't think I'll ever use more than 128mb.
 
-## This file is too big!
+## Why is this called site.c
 
-This was a for-fun side project and one of the goals was to eliminate
-dependencies from the site generation process. C makes it really annoying, due
-to build systems and header files, to start splitting things up, so I just
-didn't do it. 
-
-If you send a pull request that splits it up nicely, I'll gladly accept.
+Originally (see the past commits), this was just one big, big file called
+site.c.
 
 ## Why didn't you use Markdown?
 
