@@ -1,14 +1,12 @@
 #include "sc_file.h"
 #include <ctype.h>
+#include <string.h>
 
 // Valid characters for function names or argument keys
 static int IsNameOrKeyChar(int c);
 
 // Matches chars that make up a decimal number
 static int IsDigitChar(int ch);
-
-// isspace(ch) for all ch in text
-static int IsAllWhitespace(Slice text);
 
 // Fill out an SCObjectType_Error object with the given error message.
 static void SCError(SCReader *r, const char *str, SCObject *out);
@@ -346,7 +344,7 @@ static int IsDigitChar(int ch) {
     return isdigit(ch) || ch == '.' || ch == '-';
 }
 
-static int IsAllWhitespace(Slice text) {
+int IsAllWhitespace(Slice text) {
     while (text.begin != text.end) {
         if (!isspace(*text.begin)) { return 0; }
         text.begin++;

@@ -24,7 +24,7 @@
 //
 // path and file are just strings used when making an error
 // message, they are not opened/read
-int SCToHTML(Slice sc, const char *path, const char *file, Arena *arena, Slice *out_slice) {
+int SCToHTML(Slice sc, const char *path, const char *file, Arena *arena, Slice *out_slice);
 
 // IMPORTANT NOTE(eric): This escape function only supports characters I've
 // actually used.  

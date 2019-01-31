@@ -148,6 +148,9 @@ Slice SCMakeErrorString(SCObject *obj, Arena *arena, const char *error_text);
 // Prints the sc object to stdout
 void PrintSCObject(SCObject *obj);
 
+// isspace(ch) for all ch in text
+int IsAllWhitespace(Slice text);
+
 #ifndef NDEBUG
 void TEST_SCReader(void);
 #endif

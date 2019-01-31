@@ -1,6 +1,7 @@
 #include "paths.h"
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
+#include <stdarg.h>
 
 // IMPORTANT(eric): The varargs for this function are null terminated!
 // EX: MakePath(arena, "foo", "bar", 0);
@@ -47,7 +48,7 @@ struct DirIter {
     char               buf[BUF_SIZE];
     HANDLE             find_handle;
     WIN32_FIND_DATAA   find_data;
-} DirIter;
+};
 
 // Sets up a directory iterator, which provides an
 // iterator to access each item in the given path.
@@ -113,7 +114,7 @@ int ChangeDirectory(const char *path) {
 // Copy the current directories absolute path into the given buffer
 // Null-terminated.
 void CurrentDirectory(char *buf, memsize buf_len) {
-    GetCurrentDirectoryA(buf_len, buf);
+    GetCurrentDirectoryA((DWORD)buf_len, buf);
 }
 
 // Makes a directory. 
@@ -182,7 +183,7 @@ int WriteEntireFile(Slice data, const char *file_path) {
     memsize len = SliceLength(data);
     unsigned long bytes_read = 0;
 
-    if (!WriteFile(file, data.begin, len, &bytes_read, 0) ||
+    if (!WriteFile(file, data.begin, (DWORD)len, &bytes_read, 0) ||
         bytes_read != len) {
         CloseHandle(file);
         return 0;
@@ -199,7 +200,6 @@ int WriteEntireFile(Slice data, const char *file_path) {
 void CopyDirectory(const char *src_path, const char *src_name,
                    const char *dst_path, const char *dst_name, 
                    Arena *arena) {
-    Arena a = *arena;
     const char *full_src = MakePath(arena, src_path, src_name, 0);
     const char *full_dst = MakePath(arena, dst_path, dst_name, 0);
     const char * cmd = ArenaPrintfCStr(arena,
@@ -211,7 +211,6 @@ void CopyDirectory(const char *src_path, const char *src_name,
 
 void CopyFileToDir(const char *src_path, const char *src_name,
               const char *dst_path, Arena *arena) {
-    Arena a = *arena;
     const char *full_src = MakePath(arena, src_path, src_name, 0);
     const char *full_dst = MakePath(arena, dst_path, src_name, 0);
     const char * cmd = ArenaPrintfCStr(arena,
@@ -352,4 +351,8 @@ void CopyFileToDir(const char *src_path, const char *src_name,
 }
 
 #endif
+
+DirIter *ArenaPushDirIter(Arena *a) {
+    return ArenaPush(a, DirIter);
+}
 

@@ -12,11 +12,13 @@ dependencies other than the C compiler.
 
 ## Building site.c
 
-You can compile site.c with clang, cl, or gcc with no special options or dependencies, ex:
+A CMakeLists.txt file is provided that should work. 
 
-    clang site.c -o site
-    clang-cl -MT site.c 
-    cl /MT site.c
+Alternatively, you can perform a unity build, which compiles everything as a
+single translation unit. sh and batch scripts are included to run the unity
+build compilation. To perform the unity build, run this (or similar):
+
+    clang -O2 -DNDEBUG -DUNITY_BUILD site.c -o site
 
 ## Running site.c
 
@@ -24,8 +26,8 @@ You can compile site.c with clang, cl, or gcc with no special options or depende
 
 site.c takes two required arguments:
 
-* in_dir is the input directory full of SC source files.
-* out_dir is the output directory to which the generated files are written. If it does
+* in\_dir is the input directory full of SC source files.
+* out\_dir is the output directory to which the generated files are written. If it does
   not exist, it will be created.
 
 Optionally, you can specify:
@@ -368,4 +370,5 @@ command syntax is nice because it only requires the escaping of a single charact
 (backslash). I can use a single file format for both pages and metadata. I can
 add commands without having to change the lexing/parsing. It spits out HTML5
 with semantic tags.
+
 

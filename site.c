@@ -43,11 +43,13 @@ this is a "reasonable" way to solve this problem.
 
 ## Building site.c
 
-You can compile site.c with clang, cl, or gcc with no special options or dependencies, ex:
+A CMakeLists.txt file is provided that should work. 
 
-    clang site.c -o site
-    clang-cl -MT site.c 
-    cl /MT site.c
+Alternatively, you can perform a unity build, which compiles everything as a
+single translation unit. sh and batch scripts are included to run the unity
+build compilation. To perform the unity build, run this (or similar):
+
+    clang -O2 -DNDEBUG -DUNITY_BUILD site.c -o site
 
 ## Running site.c
 
@@ -409,6 +411,7 @@ with semantic tags.
 #include "sc_to_html.h"
 #include "site_gen.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char **argv) {
 
@@ -421,7 +424,7 @@ int main(int argc, char **argv) {
 
     if (argc < 3) {
         printf("site.exe: simple static site generator version %s.\n", VERSION_STRING);
-        printf("(c) Badly Drawn Squirrel Studios (Eric Alzheimer), 2018\n");
+        printf("(c) Eric Alzheimer, 2019\n");
         printf("Released under the MIT license.\n");
         printf("Usage: site.exe in_directory out_directory [arena_size]\n");
         printf("  in_directory  - Directory containing site source data.\n");

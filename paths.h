@@ -25,6 +25,10 @@ const char *MakePath(Arena *arena, ...);
 struct DirIter;
 typedef struct DirIter DirIter;
 
+// Allocates a DirIter for you
+// Size varies by platorm, so this must remain opaque
+DirIter *ArenaPushDirIter(Arena *a);
+
 // Sets up a directory iterator, which provides an
 // iterator to access each item in the given path.
 //

@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 char *RawArenaPush(Arena *a, memsize size) {
     assert((memsize)(a->end - a->current) >= size);
@@ -54,7 +55,7 @@ Slice ArenaPushSlice(Arena *a, Slice s) {
 
 void ArenaPushfv(Arena *a, const char *fmt, va_list ap) {
     int amt = vsnprintf(a->current, ArenaSpace(a), fmt, ap);
-    if (amt > ArenaSpace(a)-1) { amt = ArenaSpace(a)-1; }
+    if (amt > ArenaSpace(a)-1) { amt = (int)ArenaSpace(a)-1; }
     a->current += amt;
 }
 

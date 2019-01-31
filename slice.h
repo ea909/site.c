@@ -34,12 +34,12 @@ memsize SliceLength(Slice s) {
 
 // "CStr" is the name in the project for a null terminated string (ie, a
 // C-style String -> CStr)
-static inline
-Slice SliceFromCStr(const char *cstr) {
-    return (Slice) {(char*)cstr, (char*)cstr + strlen(cstr)};
-}
+Slice SliceFromCStr(const char *cstr); 
 
+// Write slice to file
 void SliceFPrint(Slice s, FILE *out); 
+
+// Write slice to stdout
 void SlicePrint(Slice s); 
 
 // Compare two slices lexicographically, returns:

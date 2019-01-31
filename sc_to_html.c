@@ -1,5 +1,7 @@
 #include "sc_to_html.h"
+#include "sc_file.h"
 #include <assert.h>
+#include <ctype.h>
 
 typedef enum HTMLTagType {
     HTMLTagType_Article,
@@ -98,9 +100,9 @@ static void HTMLOpenTag(HTMLTagStack *s, HTMLTagType tag);
 // path and file are just strings used when making an error
 // message, they are not opened/read
 int SCToHTML(Slice sc, const char *path, const char *file, Arena *arena, Slice *out_slice) {
-    SCObject obj = {};
+    SCObject obj = {0};
     SCReader reader = MakeSCReader(sc, path, file);
-    HTMLTagStack tags = {};
+    HTMLTagStack tags = {0};
     ArenaString out_string = ArenaBeginString(arena);
     InitHTMLTagStack(&tags, arena);
     HTMLPushTag(&tags, HTMLTagType_Article);

@@ -1,5 +1,10 @@
 #include "slice.h"
 #include <stdio.h>
+#include <string.h>
+
+Slice SliceFromCStr(const char *cstr) {
+    return (Slice) {(char*)cstr, (char*)cstr + strlen(cstr)};
+}
 
 void SliceFPrint(Slice s, FILE *out) { 
     fwrite(s.begin, sizeof(char), SliceLength(s), out); 
@@ -16,7 +21,7 @@ int SliceCmp(Slice a, Slice b) {
     int result = memcmp(a.begin, b.begin, min_len);
 
     if (result == 0 && alen != blen) {
-        return blen - alen;
+        return (int)(blen - alen);
     }
 
     return result;

@@ -2,7 +2,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#define VERSION_STRING "0.1"
+#define VERSION_STRING "0.2"
 
 #include <stdint.h>
 #include <stddef.h>

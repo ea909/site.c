@@ -1,5 +1,8 @@
 #include "site_gen.h"
 #include "paths.h"
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
 
 // Every SC file has an info command to provide the title and date for the
 // page.
@@ -12,7 +15,7 @@ static int GetSCInfo(Slice sc,
               const char *path, const char *file, 
               Arena *arena, SCInfo *out, Slice *error_text) {
     SCReader reader = MakeSCReader(sc, path, file);
-    SCObject obj = {};
+    SCObject obj = {0};
     int      found_info = 0;
 
     do {
@@ -49,7 +52,7 @@ static int GetSCInfo(Slice sc,
         }
     } while (obj.type != SCObjectType_End &&
              obj.type != SCObjectType_Error);
-did_not_find_info:
+
     *error_text = SCMakeErrorString(&obj, arena,
                                     "Info command not found");
     return 0;
@@ -281,13 +284,13 @@ static int GenerateBlogDirectory(const char *in_dir_absolute,
                  Arena *arena,
                  Slice *error) {
     ArenaPos original_arena_pos = ArenaSave(arena);
-    DirIter *dir_iter           = ArenaPush(arena, DirIter);
+    DirIter *dir_iter           = ArenaPushDirIter(arena);
     Blog    *blog               = ArenaPush(arena, Blog);
     memset(blog, 0, sizeof(*blog));
 
     // Get the blog title from the blog.sc file
     ChangeDirectory(in_dir_absolute);
-    Slice blog_file = {};
+    Slice blog_file = {0};
     if (!ReadEntireFile("blog.sc", arena, &blog_file)) {
         *error = ArenaPrintf(arena, "Could not read file: blog.sc, "
                              "Does it exist?, every blog folder needs one\n"
@@ -296,7 +299,7 @@ static int GenerateBlogDirectory(const char *in_dir_absolute,
     }
 
     SCReader reader = MakeSCReader(blog_file, in_dir_absolute, "blog.sc");
-    SCObject obj = {};
+    SCObject obj = {0};
     do {
         SCRead(&reader, &obj);
         switch (obj.type) {
@@ -352,13 +355,13 @@ static int GenerateBlogDirectory(const char *in_dir_absolute,
             goto dir_failure;
         }
 
-        Slice file_data = {};
+        Slice file_data = {0};
         if (!ReadEntireFile(file_name_cstr, arena, &file_data)) {
             *error = ArenaPrintf(arena, "Could not read file: %s\n", file_name_cstr);
             goto dir_failure;
         }
 
-        SCInfo sc_info = {};
+        SCInfo sc_info = {0};
         if (!GetSCInfo(file_data, in_dir_absolute, file_name_cstr, 
                        arena, &sc_info, error)) { goto dir_failure; }
 
@@ -391,7 +394,7 @@ static int GenerateBlogDirectory(const char *in_dir_absolute,
         BlogEntry *prev   = i > 0                      ? entry - 1 : 0;
         BlogEntry *next   = i < blog->entries_count - 1 ? entry + 1 : 0;
 
-        Slice page_data = {};
+        Slice page_data = {0};
         if (!GenerateBlogPage(nav, 
                               nav->site_title, blog->title,
                               in_dir_absolute, entry->in_file_name, 
@@ -469,7 +472,7 @@ static int GenerateNormalDirectory(const char *in_dir_absolute,
                       Arena *arena,
                       Slice *error) {
     ArenaPos original_arena_pos = ArenaSave(arena);
-    DirIter *dir_iter           = ArenaPush(arena, DirIter);
+    DirIter *dir_iter           = ArenaPushDirIter(arena);
 
     // Generate each file and each subdirectory
     MakeDirectory(out_dir_absolute);
@@ -496,8 +499,8 @@ static int GenerateNormalDirectory(const char *in_dir_absolute,
             if (!SliceEndsWithCStr(file_name, ".sc")) { continue; }
             if (SliceEqCStr(file_name, "nav.sc"))    { continue; }
 
-            Slice file_data = {};
-            Slice page_data = {};
+            Slice file_data = {0};
+            Slice page_data = {0};
 
             // Read sc file
             ChangeDirectory(in_dir_absolute);
@@ -587,16 +590,16 @@ int GenerateSite(const char *in_dir_relative,
 
     // Next, we read the nav.sc file. This will give us the name of the site,
     // and the list of navigation links shown at the top of each page.
-    Slice nav_data = {};
+    Slice nav_data = {0};
     if (!ReadEntireFile("nav.sc", arena, &nav_data)) {
         *error = ArenaPrintf(arena, "Could not read the nav file (nav.sc)" 
                                     " from the root of the input directory");
         return 0;
     }
 
-    SiteNavigation nav    = {};
+    SiteNavigation nav    = {0};
     SCReader       reader = MakeSCReader(nav_data, in_dir_absolute, "nav.sc");
-    SCObject       obj    = {};
+    SCObject       obj    = {0};
     int            found_title = 0;
 
     do {
@@ -723,7 +726,7 @@ void TEST_GenerateNormalPage(void) {
     Arena test_arena = AllocArena(ARENA_SIZE);
     Slice result;
 
-    SiteNavigation nav = {};
+    SiteNavigation nav = {0};
     nav.site_title = SliceFromCStr("Awesome test site");
     nav.nav_count = 2;
     nav.links [0] = SliceFromCStr("http://zombo.com");
