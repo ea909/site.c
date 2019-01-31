@@ -8,6 +8,9 @@ creation of navigation links and archives. It generates small, minimalist HTML5 
 Supports Windows, Linux and maybe macOS (haven't tried it), and it requires no
 dependencies other than the C compiler.
 
+This is written in C for entertainment purposes only :) I wouldn't say that
+this is a "reasonable" way to solve this problem.
+
 # site.c Users Guide
 
 ## Building site.c
